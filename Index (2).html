@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Kasir dan Pembuatan Member</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(120deg, #f6d365, #fda085);
+            color: #333;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .form-title {
+            margin-bottom: 30px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #444;
+            text-align: center;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .checkbox-group input {
+            margin-right: 10px;
+        }
+        .checkbox-group label {
+            margin-right: 20px;
+        }
+        #member-section {
+            margin-top: 50px;
+        }
+        .form-section {
+            margin-bottom: 40px;
+        }
+        .struk-section {
+            margin-top: 50px;
+            text-align: center;
+        }
+        .struk {
+            padding: 20px;
+            border: 1px solid #333;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            display: inline-block;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-line;
+            text-align: left;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #fda085;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #f6d365;
+        }
+    </style>
+    <!-- Tambahkan QRious library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <div class="form-section">
+            <div class="form-title">Data Kasir:</div>
+
+            <div class="form-group">
+                <label for="nama-kasir">Nama Kasir</label>
+                <input type="text" id="nama-kasir" name="nama-kasir">
+            </div>
+
+            <div class="form-group">
+                <label for="user-id">User ID</label>
+                <input type="text" id="user-id" name="user-id">
+            </div>
+        </div>
+
+        <div class="form-section">
+            <div class="form-title">Pembelian:</div>
+
+            <div class="form-group">
+                <label for="id-produk">ID Produk</label>
+                <input type="text" id="id-produk" name="id-produk" oninput="updateProductDetails()">
+            </div>
+
+            <div class="form-group">
+                <label for="merek">Merek</label>
+                <input type="text" id="merek" name="merek" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="jenis">Jenis</label>
+                <input type="text" id="jenis" name="jenis" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="harga">Harga</label>
+                <input type="number" id="harga" name="harga" readonly>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="pembelian" name="pembelian">
+                <label for="pembelian">Pembelian</label>
+                <input type="checkbox" id="pembuatan" name="pembuatan">
+                <label for="pembuatan">Pembuatan</label>
+                <input type="checkbox" id="member" name="member">
+                <label for="member">Member</label>
+            </div>
+
+            <div class="form-group">
+                <label for="input-member">Input Member</label>
+                <input type="text" id="input-member" name="input-member" oninput="updateMemberName()">
+            </div>
+
+            <div class="form-group">
+                <label for="output-member">Output Member</label>
+                <input type="text" id="output-member" name="output-member" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="total">Total</label>
+                <input type="text" id="total" name="total" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="uang">Jumlah Uang yang Diberikan</label>
+                <input type="number" id="uang" name="uang" oninput="updateKembalian()">
+            </div>
+
+            <div class="form-group">
+                <label for="jenis-pembayaran">Jenis Pembayaran</label>
+                <select id="jenis-pembayaran" name="jenis-pembayaran">
+                    <option value="tunai">Tunai</option>
+                    <option value="kartu-kredit">Kartu Kredit</option>
+                    <option value="transfer-bank">Transfer Bank</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="kembalian">Kembalian</label>
+                <input type="text" id="kembalian" name="kembalian" readonly>
+            </div>
+
+            <button onclick="printStruk()">Cetak Struk</button>
+        </div>
+
+        <div id="member-section" class="form-section">
+            <div class="form-title">Pembuatan Member Baru:</div>
+
+            <div class="form-group">
+                <label for="new-member-id">Nomor Member</label>
+                <input type="text" id="new-member-id" name="new-member-id">
+            </div>
+
+            <div class="form-group">
+                <label for="new-member-name">Nama Member</label>
+                <input type="text" id="new-member-name" name="new-member-name">
+            </div>
+
+            <button onclick="addMember()">Daftarkan Member</button>
+            <p id="status-message"></p>
+        </div>
+
+        <div id="struk-section" class="struk-section">
+            <div class="form-title">Struk Pembelian:</div>
+            <div id="struk" class="struk"></div>
+            <canvas id="qrcode"></canvas> <!-- Elemen untuk kode QR -->
+        </div>
+
+    </div>
+
+    <script>
+        // Daftar produk dalam bentuk objek
+        var products = {
+            "23334455": {merek: "PASEO", jenis: "TISSUE", harga: 10000},
+            "35536596": {merek: "BIMOLI", jenis: "MINYAK", harga: 15000},
+            "123456": {merek: "MAINTENANCE", jenis: "SERVICE MUSIK", harga: 2000}
+            // Tambahkan produk lainnya di sini
+        };
+
+        // Daftar member dalam bentuk objek
+        var members = {
+            "12345": "John Doe",
+            "67890": "Jane Smith",
+            "11223": "David Brown"
+            // Tambahkan member lainnya di sini
+        };
+
+        function formatRupiah(angka) {
+            var rupiah = '';
+            var angkarev = angka.toString().split('').reverse().join('');
+            for (var i = 0; i < angkarev.length; i++)
+                if (i % 3 === 0) rupiah += angkarev.substr(i, 3) + '.';
+            return 'Rp ' + rupiah.split('', rupiah.length - 1).reverse().join('');
+        }
+
+        function updateProductDetails() {
+            var productId = document.getElementById("id-produk").value;
+            var product = products[productId];
+
+            if (product) {
+                document.getElementById("merek").value = product.merek;
+                document.getElementById("jenis").value = product.jenis;
+                document.getElementById("harga").value = product.harga;
+                updateTotal(); // Memperbarui total setelah produk ditemukan
+            } else {
+                document.getElementById("merek").value = "";
+                document.getElementById("jenis").value = "";
+                document.getElementById("harga").value = "";
+                document.getElementById("total").value = ""; // Mengosongkan total jika produk tidak ditemukan
+            }
+        }
+
+        function updateMemberName() {
+            var memberId = document.getElementById("input-member").value;
+            var memberName = members[memberId];
+
+            if (memberName) {
+                document.getElementById("output-member").value = memberName;
+            } else {
+                document.getElementById("output-member").value = "";
+            }
+        }
+
+        function updateTotal() {
+            var harga = parseInt(document.getElementById("harga").value) || 0;
+            document.getElementById("total").value = formatRupiah(harga);
+        }
+
+        function updateKembalian() {
+            var total = parseInt(document.getElementById("total").value.replace(/[^0-9]/g, '')) || 0;
+            var uang = parseInt(document.getElementById("uang").value) || 0;
+            var kembalian = uang - total;
+
+            document.getElementById("kembalian").value = formatRupiah(kembalian);
+        }
+
+        function printStruk() {
+            var strukContent = `
+Nama Kasir: ${document.getElementById("nama-kasir").value}
+User ID: ${document.getElementById("user-id").value}
+
+ID Produk: ${document.getElementById("id-produk").value}
+Merek: ${document.getElementById("merek").value}
+Jenis: ${document.getElementById("jenis").value}
+Harga: ${document.getElementById("harga").value}
+Total: ${document.getElementById("total").value}
+
+Pembayaran: ${document.getElementById("jenis-pembayaran").value}
+Jumlah Uang: ${formatRupiah(parseInt(document.getElementById("uang").value))}
+Kembalian: ${document.getElementById("kembalian").value}
+
+Member: ${document.getElementById("output-member").value}
+            `;
+
+            document.getElementById("struk").innerText = strukContent;
+
+            // Menghasilkan kode QR berdasarkan data struk
+            var qr = new QRious({
+                element: document.getElementById('qrcode'),
+                value: strukContent,
+                size: 200,
+                level: 'H'
+            });
+        }
+
+        function addMember() {
+            var memberId = document.getElementById("new-member-id").value;
+            var memberName = document.getElementById("new-member-name").value;
+
+            if (memberId && memberName) {
+                members[memberId] = memberName;
+                document.getElementById("status-message").innerText = "Member berhasil didaftarkan.";
+                document.getElementById("status-message").style.color = "green";
+            } else {
+                document.getElementById("status-message").innerText = "Harap isi semua kolom.";
+                document.getElementById("status-message").style.color = "red";
+            }
+
+            // Mengosongkan input setelah pendaftaran
+            document.getElementById("new-member-id").value = "";
+            document.getElementById("new-member-name").value = "";
+        }
+    </script>
+</body>
+</html>
